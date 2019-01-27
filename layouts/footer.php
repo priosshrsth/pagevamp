@@ -202,7 +202,7 @@
                                 </div>
                             </div>
                             <div class="addtocart-btn">
-                                <a href="#">Add to cart</a>
+                                <a class="add_to_cart" product="" href="javascript:void(0)">Add to cart</a>
                             </div>
                         </div><!-- .product-info -->
                     </div><!-- .modal-product -->
@@ -287,16 +287,23 @@ if(isset($_JS)) {
         var invoker = $(e.relatedTarget);
         var product = JSON.parse(invoker.attr('data'));
         $('img', $(this)).attr('src', 'images/products/'+product.image);
+        $('.add_to_cart', $(this)).attr('product', product.id);
+        $('.product-info>h1:first-child',$(this)).text(product.name);
+        var price = parseFloat(product.price) + 500;
+        $('.old-price', $(this)).text('$'+price);
+        $('.new-price', $(this)).text('$'+product.price);
     });
 
-    $(".add_to_cart").click(function(e) {
-        e.preventDefault();
-        alert('sd');
-        // if($(this).hasAttribute('product')) {
-        //     app.addToCart($(this).attr('product'));
-        // }
-    });
+    $(document).ready(function () {
+        $("#productModal .add_to_cart").click(function(e) {
+            e.preventDefault();
+            var id = $(this).attr('product');
+            if(id != undefined) {
+                app.addToCart($(this).attr('product'));
+            }
+        });
 
+    });
     var app = new Vue({
         el: '#app',
         data: {
@@ -353,7 +360,7 @@ if(isset($_JS)) {
                         try {
                             if(data.success) {
                                 if(data.new) {
-                                    self.push(data.product);
+                                    self.cart.push(data.product);
                                 } else {
                                     let obj = self.cart.find(x => x.id == productID);
                                     let index = self.cart.indexOf(obj);
