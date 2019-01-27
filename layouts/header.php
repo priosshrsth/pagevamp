@@ -26,12 +26,14 @@
     <link rel="stylesheet" href="css/core.css">
     <!-- Theme shortcodes/elements style -->
     <link rel="stylesheet" href="css/shortcode/shortcodes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <!-- Theme main style -->
     <link rel="stylesheet" href="css/style.css">
     <!-- Responsive css -->
     <link rel="stylesheet" href="css/responsive.css">
     <!-- User style -->
     <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="css/prios.css">
     <!-- Modernizr JS -->
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
 
@@ -53,7 +55,7 @@
 
 <body>
 <!-- Body main wrapper start -->
-<div class="wrapper fixed__footer">
+<div id="app" v-cloak class="wrapper fixed__footer">
     <!-- Start Header Style -->
     <header id="header" class="htc-header header--3 bg__white">
         <!-- Start Mainmenu Area -->
@@ -74,15 +76,15 @@
                                 <li class="drop"><a href="index.php">Home</a></li>
                                 <?php
                                 foreach ($brands as $brand) {?>
-                                    <li class="drop"><a href="/brand?name=<?php slug($brand->name); ?>"><?php echo $brand->name ?></a>
+                                    <li class="drop"><a href="brand.php?name=<?php slug($brand->name); ?>"><?php echo $brand->name ?></a>
                                         <ul class="dropdown">
                                             <?php
                                             foreach($categories as $category) {
                                             ?>
-                                                <li><a href="/category?brand=<?php slug($brand->name); ?>&category=<?php slug($category->name); ?>"><?php echo $category->name ?><span><i class="zmdi zmdi-chevron-right"></i></span></a>
+                                                <li><a href="category.php?brand=<?php slug($brand->name); ?>&category=<?php slug($category->name); ?>"><?php echo $category->name ?><span><i class="zmdi zmdi-chevron-right"></i></span></a>
                                                     <ul class="lavel-dropdown">
-                                                        <li><a href="/category?brand=<?php slug($brand->name); ?>&category=<?php slug($category->name); ?>&filter=male">Male</a></li>
-                                                        <li><a href="/category?brand=<?php slug($brand->name); ?>&category=<?php slug($category->name); ?>&filter=female">Female</a></li>
+                                                        <li><a href="category.php?brand=<?php slug($brand->name); ?>&category=<?php slug($category->name); ?>&filter=male">Male</a></li>
+                                                        <li><a href="category.php?brand=<?php slug($brand->name); ?>&category=<?php slug($category->name); ?>&filter=female">Female</a></li>
                                                     </ul>
                                                 </li>
                                             <?php } ?>
@@ -92,7 +94,8 @@
                                 <li><a href="contact.php">Contact</a></li>
                                 <?php
                                 if(!auth()->check()) {
-                                    echo "<li> <a href='register.php'>Register</a></li>";
+                                    echo "<li> <a href='register.php'>Login</a></li>";
+                                    echo "<li> <a href='register.php?action=register'>Register</a></li>";
                                 }
                                 ?>
                             </ul>
@@ -100,34 +103,31 @@
                         <div class="mobile-menu clearfix visible-xs visible-sm">
                             <nav id="mobile_dropdown">
                                 <ul>
-                                    <li><a href="index.html">Home</a></li>
-                                    <li><a href="#">portfolio</a>
-                                        <ul>
-                                            <li><a href="portfolio-card-box-2.html">portfolio</a></li>
-                                            <li><a href="single-portfolio.html">Single portfolio</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="blog.html">blog</a>
-                                        <ul>
-                                            <li><a href="blog.html">blog 3 column</a></li>
-                                            <li><a href="blog-details.html">Blog details</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">pages</a>
-                                        <ul>
-                                            <li><a href="about.html">about</a></li>
-                                            <li><a href="customer-review.html">customer review</a></li>
-                                            <li><a href="shop.html">shop</a></li>
-                                            <li><a href="shop-sidebar.html">shop sidebar</a></li>
-                                            <li><a href="product-details.html">product details</a></li>
-                                            <li><a href="cart.html">cart</a></li>
-                                            <li><a href="wishlist.html">wishlist</a></li>
-                                            <li><a href="checkout.html">checkout</a></li>
-                                            <li><a href="team.html">team</a></li>
-                                            <li><a href="login-register.html">login & register</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="contact.html">contact</a></li>
+                                    <li><a href="index.php">Home</a></li>
+                                    <?php
+                                    foreach ($brands as $brand) {?>
+                                        <li><a href="brand.php?name=<?php slug($brand->name); ?>"><?php echo $brand->name ?></a>
+                                            <ul>
+                                                <?php
+                                                foreach($categories as $category) {
+                                                    ?>
+                                                    <li><a href="category.php?brand=<?php slug($brand->name); ?>&category=<?php slug($category->name); ?>"><?php echo $category->name ?><span><i class="zmdi zmdi-chevron-right"></i></span></a>
+                                                        <ul>
+                                                            <li><a href="category.php?brand=<?php slug($brand->name); ?>&category=<?php slug($category->name); ?>&filter=male">Male</a></li>
+                                                            <li><a href="category.php?brand=<?php slug($brand->name); ?>&category=<?php slug($category->name); ?>&filter=female">Female</a></li>
+                                                        </ul>
+                                                    </li>
+                                                <?php } ?>
+                                            </ul>
+                                        </li>
+                                    <?php } ?>
+                                    <li><a href="contact.php">Contact</a></li>
+                                    <?php
+                                    if(!auth()->check()) {
+                                        echo "<li> <a href='register.php'>Login</a></li>";
+                                        echo "<li> <a href='register.php?action=register'>Register</a></li>";
+                                    }
+                                    ?>
                                 </ul>
                             </nav>
                         </div>
@@ -136,8 +136,18 @@
                     <div class="col-md-2 col-sm-4 col-xs-3">
                         <ul class="menu-extra">
                             <li class="search search__open hidden-xs"><span class="ti-search"></span></li>
-                            <li><a href="login-register.html"><span class="ti-user"></span></a></li>
-                            <li class="cart__menu"><span class="ti-shopping-cart"></span></li>
+                            <li class="dropdown"><a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0)"><span class="ti-user"></span><?php echo auth()->user()->username; ?></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="checkout.php">Checkout</a></li>
+                                    <li>
+                                        <form method="POST">
+                                            <?php csrf_field(); ?>
+                                            <button name="logout" type="submit" class="btn btn-link">Logout</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="cart__menu"><span class="ti-shopping-cart">{{cart.length}}</span></li>
                             <li class="toggle__menu hidden-xs hidden-sm"><span class="ti-menu"></span></li>
                         </ul>
                     </div>
@@ -235,31 +245,16 @@
                     <a href="#"><i class="zmdi zmdi-close"></i></a>
                 </div>
                 <div class="shp__cart__wrap">
-                    <div class="shp__single__product">
+                    <div v-for="(item,key) in cart" class="shp__single__product">
                         <div class="shp__pro__thumb">
-                            <a href="#">
-                                <img src="images/product/sm-img/1.jpg" alt="product images">
+                            <a :href="'product.php?id='+item.id">
+                                <img :src="'images/products/'+item.image" alt="product images">
                             </a>
                         </div>
                         <div class="shp__pro__details">
-                            <h2><a href="product-details.html">BO&Play Wireless Speaker</a></h2>
-                            <span class="quantity">QTY: 1</span>
-                            <span class="shp__price">$105.00</span>
-                        </div>
-                        <div class="remove__btn">
-                            <a href="#" title="Remove this item"><i class="zmdi zmdi-close"></i></a>
-                        </div>
-                    </div>
-                    <div class="shp__single__product">
-                        <div class="shp__pro__thumb">
-                            <a href="#">
-                                <img src="images/product/sm-img/2.jpg" alt="product images">
-                            </a>
-                        </div>
-                        <div class="shp__pro__details">
-                            <h2><a href="product-details.html">Brone Candle</a></h2>
-                            <span class="quantity">QTY: 1</span>
-                            <span class="shp__price">$25.00</span>
+                            <h2><a :href="'product.php?id='+item.id">{{item.name}}</a></h2>
+                            <span class="quantity">QTY: {{item.quantity}}</span>
+                            <span class="shp__price">${{item.price}}</span>
                         </div>
                         <div class="remove__btn">
                             <a href="#" title="Remove this item"><i class="zmdi zmdi-close"></i></a>
@@ -268,7 +263,7 @@
                 </div>
                 <ul class="shoping__total">
                     <li class="subtotal">Subtotal:</li>
-                    <li class="total__price">$130.00</li>
+                    <li class="total__price">${{totalPrice}}</li>
                 </ul>
                 <ul class="shopping__btn">
                     <li><a href="cart.html">View Cart</a></li>

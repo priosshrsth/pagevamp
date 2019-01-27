@@ -17,6 +17,7 @@ CREATE TABLE products (
     name varchar(60) unique NOT NULL,
     gender varchar(1) NOT NULL,
     price DECIMAL(6,2) NOT NULL,
+    image varchar(100) NOT NULL,
     brand_id int NOT NULL,
     category_id int NOT NULL,
     FOREIGN KEY (brand_id) REFERENCES brands(id) ON UPDATE CASCADE ON DELETE CASCADE,

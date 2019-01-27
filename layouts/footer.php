@@ -227,7 +227,8 @@
 <script src="js/waypoints.min.js"></script>
 <!-- Main js file that contents all jQuery plugins activation. -->
 <script src="js/main.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <?php
 if(isset($_JS)) {
     foreach($JS as $js) {
@@ -240,6 +241,143 @@ if(isset($_JS)) {
     }
 }
 ?>
+
+<script>
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": 4000,
+        "extendedTimeOut": 3000,
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+    <?php
+    if(isset($success) && sizeof($success) > 0) {
+        foreach ($success as $msg) {
+            echo "toastr.success('$msg', 'Yay!! Successfull!!!!')";
+        }
+    }
+    if(isset($exceptions) && sizeof($exceptions) > 0) {
+        foreach ($exceptions as $msg) {
+            echo "toastr.error('$msg', 'Ooops! Error!!!!',{timeOut: 3000})";
+        }
+    }
+    if(isset($warnings) && sizeof($warnings) > 0) {
+        foreach ($warnings as $msg) {
+            echo "toastr.warning('$msg', 'Be Careful!!', {timeOut: 8000})";
+        }
+    }
+    ?>
+
+    $('.product-tab-list li a').click(function (e) {
+       // e.preventDefault();
+        $(this).tab('show');
+    });
+
+    $('#productModal').on('show.bs.modal', function (e) {
+        var invoker = $(e.relatedTarget);
+        var product = JSON.parse(invoker.attr('data'));
+        $('img', $(this)).attr('src', 'images/products/'+product.image);
+    });
+
+    $(".add_to_cart").click(function(e) {
+        e.preventDefault();
+        alert('sd');
+        // if($(this).hasAttribute('product')) {
+        //     app.addToCart($(this).attr('product'));
+        // }
+    });
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            cart: [],
+            header: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "X-Requested-With": "XMLHttpRequest",
+            },
+        },
+        computed: {
+            totalPrice() {
+                var total = 0;
+                this.cart.filter((item) => {
+                    total+=parseFloat(item.price);
+                });
+                return total;
+            }
+        },
+        created() {
+            var self = this;
+            fetch('api.php?api=true&filter=session', {
+                headers: self.header,
+                method: "post",
+                credentials: "same-origin",
+                'X-CSRF-Token': "<?php csrf_token(); ?>",
+            })
+            .then((resp) => resp.json()) // Call the fetch function passing the url of the API as a parameter
+            .then(function(data) {
+                if(data.length > 0)
+                self.cart = data;
+                // Your code for handling the data you get from the API
+            })
+            .catch(function(error) {
+                console.log(error);
+                // This is where you run code if the server returns any errors
+            });
+        },
+        methods: {
+            addToCart(productID) {
+                var self = this;
+                //var body = {
+                //    'id': productID,
+                //    'add_to_cart': 'Submit',
+                //    '_token': "//",
+                //};
+                fetch('api.php?api=true&add_to_cart=true&id='+productID, {
+                    method: "get",
+                    headers: self.header,
+                    credentials: "same-origin",
+                })
+                    .then((resp) => resp.json()) // Call the fetch function passing the url of the API as a parameter
+                    .then(function(data) {
+                        try {
+                            if(data.success) {
+                                if(data.new) {
+                                    self.push(data.product);
+                                } else {
+                                    let obj = self.cart.find(x => x.id == productID);
+                                    let index = self.cart.indexOf(obj);
+                                    self.cart[index].quantity = self.cart[index].quantity + 1;
+                                }
+                                toastr.success(data.msg, 'Added to cart!!');
+                            } else {
+                                toastr.error(data.msg, 'Ooops! Error!!!!');
+                            }
+                        } catch (e) {
+                            console.log(data);
+                            toastr.warning('Unable to resolve response!', 'Ooops! Error!!!!');
+                        }
+                        // Your code for handling the data you get from the API
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        // This is where you run code if the server returns any errors
+                    });
+            }
+        }
+    })
+
+</script>
 
 </body>
 

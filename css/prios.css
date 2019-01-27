@@ -1,0 +1,16 @@
+.only-banner-img.new.product {
+    background: url(../images/bg/Adidas.jpg);
+    width: 100%;
+    height: 350px !important;
+}
+
+.parallax {
+    background-attachment: fixed !important;
+    background-size: cover !important;
+    background-position: center center !important;
+}
+
+.product-categories-menu ul li>a {
+    height: 100% !important;
+}
+

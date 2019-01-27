@@ -12,5 +12,5 @@ class Check extends Test
     public static $name = "Check";
 }
 
-$x = new Test();
+$x = new Check();
 var_dump($x->get());

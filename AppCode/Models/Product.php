@@ -6,7 +6,9 @@
  * Time: 1:29 AM
  */
 
-class Product
+require_once 'Model.php';
+
+class Product extends Model
 {
     public $name;
 }
