@@ -148,7 +148,9 @@ foreach($brands as $brand) {
                                             <?php
                                             if($gender_filter!='male' || $gender_filter=='') {
                                                 ?>
-                                                <li role="presentation">
+                                                <li role="presentation" class="<?php
+                                                if($gender_filter=='female' && $index==0) echo 'active';
+                                                ?>">
                                                     <a href="#brand<?php echo $brand->id . '_cat' . $category->id . '_female' ?>"
                                                        data-toggle="tab">
                                                         <div class="tab-menu-text">
@@ -243,7 +245,9 @@ foreach($brands as $brand) {
                                         <?php
                                         if($gender_filter!='male' || $gender_filter=='') {
                                             ?>
-                                        <div role="tabpanel" class="tab-pane fade"
+                                        <div role="tabpanel" class="tab-pane fade <?php
+                                        if($gender_filter=='female' && $index==0) echo 'in active';
+                                        ?>"
                                              id="brand<?php echo $brand->id . '_cat' . $category->id . '_female' ?>">
                                             <div class="row">
                                                 <div class="product-slider-active owl-carousel">
