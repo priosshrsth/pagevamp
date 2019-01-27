@@ -1,5 +1,14 @@
 <?php require_once 'layouts/app.php' ?>
 <?php require_once 'layouts/header.php' ?>
+<?php
+if(!(isset($_GET['id']) && $_GET['id'] !== '')) {
+    header('Location: index.php');
+}
+    $id = $_GET['id'];
+    $product = data()->query("SELECT products.*, categories.name as category,
+    brands.name as brand FROM products INNER JOIN categories ON products.category_id = categories.id INNER JOIN brands ON brands.id = products.brand_id WHERE products.id = $id")->fetchObject();
+?>
+?>
 <section class="htc__product__details pt--120 pb--100 bg__white">
     <div class="container">
         <div class="row">
@@ -32,7 +41,7 @@
                     <div class="product__big__images">
                         <div class="portfolio-full-image tab-content">
                             <div role="tabpanel" class="tab-pane fade in active product-video-position" id="img-tab-1">
-                                <img src="images/product-details/big-img/10.jpg" alt="full-image">
+                                <img src="images/products/<?php echo $product->image;?>" alt="full-image">
                                 <div class="product-video">
                                     <a class="video-popup" href="https://www.youtube.com/watch?v=cDDWvj_q-o8">
                                         <i class="zmdi zmdi-videocam"></i> View Video
@@ -70,7 +79,7 @@
             <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 smt-30 xmt-30">
                 <div class="htc__product__details__inner">
                     <div class="pro__detl__title">
-                        <h2>Black Clock</h2>
+                        <h2><?php echo $product->name; ?></h2>
                     </div>
                     <div class="pro__dtl__rating">
                         <ul class="pro__rating">
@@ -86,8 +95,8 @@
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit, sed do eiusmod temf incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, nostr exercitation ullamco laboris nisi ut aliquip ex ea. </p>
                     </div>
                     <ul class="pro__dtl__prize">
-                        <li class="old__prize">$15.21</li>
-                        <li>$10.00</li>
+                        <li class="old__prize">$<?php echo $product->price + 500; ?></li>
+                        <li>$<?php echo $product->price; ?></li>
                     </ul>
                     <div class="pro__dtl__color">
                         <h2 class="title__5">Choose Colour</h2>
@@ -121,7 +130,7 @@
                         </div>
                     </div>
                     <ul class="pro__dtl__btn">
-                        <li class="buy__now__btn"><a href="#">buy now</a></li>
+                        <li @click="addToCart(<?php echo $product->id ?>)" class="buy__now__btn"><a href="#">Add To Cart</a></li>
                         <li><a href="#"><span class="ti-heart"></span></a></li>
                         <li><a href="#"><span class="ti-email"></span></a></li>
                     </ul>
@@ -140,3 +149,5 @@
     </div>
 </section>
 <!-- End Product Details -->
+
+<?php require_once 'layouts/footer.php'; ?>
