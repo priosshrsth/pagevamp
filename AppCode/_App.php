@@ -148,6 +148,26 @@ if(isset($_GET) || isset($_POST)) {
             die(json($reponse));
         }
 
+        if(isset($_GET['remove_from_cart'])) {
+            $CART = session('cart');
+            $index = $_GET['index'];
+
+            if($CART !== null) {
+                unset($CART[$index]);
+                $CART = array_values($CART);
+                $reponse = (object) array(
+                    'success' => true,
+                    'msg' => "Product Removed From Cart!!",
+                );
+            } else {
+                $reponse = (object) array(
+                    'success' => false,
+                    'msg' => "Cart is empty!!",
+                );
+            }
+            die(json($reponse));
+        }
+
 
         die("You are accessing api!!");
     }

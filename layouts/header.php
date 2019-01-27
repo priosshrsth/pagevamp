@@ -91,6 +91,7 @@
                                         </ul>
                                     </li>
                                 <?php } ?>
+                                <li><a href="about.php">About</a></li>
                                 <li><a href="contact.php">Contact</a></li>
                                 <?php
                                 if(!auth()->check()) {
@@ -121,6 +122,7 @@
                                             </ul>
                                         </li>
                                     <?php } ?>
+                                    <li><a href="about.php">About Us</a></li>
                                     <li><a href="contact.php">Contact</a></li>
                                     <?php
                                     if(!auth()->check()) {
@@ -266,8 +268,8 @@
                     <li class="total__price">${{totalPrice}}</li>
                 </ul>
                 <ul class="shopping__btn">
-                    <li><a href="cart.html">View Cart</a></li>
-                    <li class="shp__checkout"><a href="checkout.html">Checkout</a></li>
+                    <li><a href="cart.php">View Cart</a></li>
+                    <li class="shp__checkout"><a href="checkout.php">Checkout</a></li>
                 </ul>
             </div>
         </div>

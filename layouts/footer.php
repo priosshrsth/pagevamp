@@ -318,7 +318,7 @@ if(isset($_JS)) {
             totalPrice() {
                 var total = 0;
                 this.cart.filter((item) => {
-                    total+=parseFloat(item.price);
+                    total+=parseFloat(item.price)*parseFloat(item.quantity);
                 });
                 return total;
             }
@@ -380,6 +380,38 @@ if(isset($_JS)) {
                         console.log(error);
                         // This is where you run code if the server returns any errors
                     });
+            },
+            removeFromCart(index) {
+                var self = this;
+                fetch('api.php?api=true&remove_from_cart=true&index='+index, {
+                    method: "get",
+                    headers: self.header,
+                    credentials: "same-origin",
+                })
+                    .then((resp) => resp.json()) // Call the fetch function passing the url of the API as a parameter
+                    .then(function(data) {
+                        try {
+                            if(data.success) {
+                                self.cart.splice(index,1);
+                                toastr.success("Successfully Removed From CArt", 'Removed!!');
+                            } else {
+                                toastr.error("Unable To Remove!", 'Ooops! Error!!!!');
+                            }
+                        } catch (e) {
+                            console.log(data);
+                            toastr.warning('Unable to resolve response!', 'Ooops! Error!!!!');
+                        }
+                        // Your code for handling the data you get from the API
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        // This is where you run code if the server returns any errors
+                    });
+            },
+            getPrice(index) {
+                console.log(index);
+                var cart = this.cart;
+                return parseFloat(cart[index].price) * parseFloat(cart[index].quantity);
             }
         }
     })
