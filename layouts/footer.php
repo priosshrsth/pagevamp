@@ -227,6 +227,7 @@
 <script src="js/waypoints.min.js"></script>
 <!-- Main js file that contents all jQuery plugins activation. -->
 <script src="js/main.js"></script>
+<script src="js/vendor/validator.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <?php
@@ -415,6 +416,24 @@ if(isset($_JS)) {
             }
         }
     })
+
+    function text($el) {
+        var words = $el.val().match(/\S+/g).length;
+        var min = $el.attr('min');
+        if(typeof(min) == "undefined") {
+            min = 0;
+        }
+        var max = $el.attr('max');
+        if(typeof(max) == "undefined") {
+            max = 4000;
+        }
+        if(words<min) {
+            return "It needs to be more than "+min+" characters!";
+        }
+        if(words>max) {
+            return "It needs to be less than "+max+" characters!";
+        }
+    }
 
 </script>
 
