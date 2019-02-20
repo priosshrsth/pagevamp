@@ -35,6 +35,7 @@ class Auth {
             return true;
         }
     }
+    
     public static function authenticated() {
         /*
          * Return true if user is authenticated
@@ -50,6 +51,7 @@ class Auth {
         }
         return false;
     }
+
     public function user() {
         /*
          *  Return Authenticated user instance as object

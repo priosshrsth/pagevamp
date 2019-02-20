@@ -8,16 +8,5 @@
 require_once 'Model.php';
 class Category extends Model
 {
-    public $name;
-
-//    public static function find($id) {
-//        return data()->query("SELECT * FROM categories WHERE id = $id;")->fetchObject(self);
-//    }
-//    public static function get($attributes = ['*']) {
-//        $attributes = implode(',', $attributes);
-//        return data()->query("SELECT $attributes FROM users;")->fetchAll(PDO::FETCH_CLASS,self);
-//    }
-//    public static function update() {
-//
-//    }
+    public $name,$attributes,$unit,$bulkUnit;
 }

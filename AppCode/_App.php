@@ -1,21 +1,30 @@
 <?php require_once '_Session.php'?>
 
 <?php
+
 $_MODE = 'Prod'; //Supported 'Dev' For development mode
 //error_reporting(0);
 /*
  * Class to set key name for global variables. This class must be set!
  */
+$base_path = str_replace('AppCode/../','',__DIR__ . '/../');
 class App {
     public static $key;
-
+    public static $base_path;
     public function __construct($name) {
         self::$key = $name;
     }
 
 }
+
+App::$base_path = $base_path;
+
+function storage($path) {
+    return App::$base_path.$path;
+}
 new App('prios'); //init class once
 
+require_once 'Models/User.php';
 require_once '_Auth.php';
 
 function slug($value) {
@@ -51,8 +60,6 @@ require_once '_Protect.php';
 require_once '_Token.php'; //Class To generate and use token;
 
 require_once './AppCode/Models/Model.php';
-
-new Model();
 
 if(isset($_GET) || isset($_POST)) {
     //handle request
