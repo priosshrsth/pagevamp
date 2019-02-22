@@ -1,7 +1,7 @@
 <?php session_start(); ?>
 
 <?php
-
+require '_Protect.php';
 class Session {
 
 }

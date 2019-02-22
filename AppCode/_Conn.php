@@ -1,4 +1,5 @@
 <?php
+require '_Protect.php';
 // class Conn {
 //     private $db = "ecommerce";
 //     private $server = "localhost";

@@ -1,0 +1,7 @@
+[v-cloak] *:not(#loading) {
+    display: none;
+}
+
+#pageContainer:not([v-cloak]) #loading {
+    display: none;
+}

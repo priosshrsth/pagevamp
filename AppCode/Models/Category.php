@@ -10,3 +10,7 @@ class Category extends Model
 {
     public $name,$attributes,$unit,$bulkUnit;
 }
+
+class Attribute {
+    public $name,$unit,$bulkUnit,$required,$type,$supportedValues;
+}

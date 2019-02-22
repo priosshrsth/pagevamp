@@ -5,11 +5,9 @@
  * Date: 1/26/19
  * Time: 1:30 AM
  */
-require_once './AppCode/_Conn.php';
-require_once './AppCode/_App.php';
-require_once './AppCode/Models/User.php';
-require_once './AppCode/Models/Product.php';
-require_once './AppCode/Models/Category.php';
+$base = realpath( dirname( __FILE__ ) );
+require_once( $base.'/../_Conn.php' );
+require_once( $base.'/../_App.php' );
 
 abstract class Model
 {
@@ -94,7 +92,7 @@ abstract class Model
                     return $obj->$key == $value;
             }
         });
-
+        $data = array_values($data);
         return self::collect($data);
 
     }
@@ -150,7 +148,7 @@ abstract class Model
         $json = file_get_contents($file);
         $json = json_decode($json);
         if($json==null) {
-            throw new Exception('Invalid JSON data!');
+            trigger_error('Invalid JSON data!', E_USER_WARNING);;
             return [];
         } else {
             return $json;

@@ -1,0 +1,83 @@
+[
+    {
+        "name": "Electronics",
+        "attributes": [
+            {
+                "name": "size",
+                "unit": "inch",
+                "bulkUnit": null,
+                "required": true,
+                "type": "string",
+                "supportedValues": null
+            },
+            {
+                "name": "features",
+                "unit": null,
+                "bulkUnit": null,
+                "required": true,
+                "type": "list",
+                "supportedValues": null
+            },
+            {
+                "name": "warranty",
+                "unit": "months",
+                "bulkUnit": "years",
+                "required": true,
+                "type": "number",
+                "supportedValues": null
+            }
+        ],
+        "unit": null,
+        "bulkUnit": null,
+        "id": 1
+    },
+    {
+        "name": "Clothes",
+        "attributes": [
+            {
+                "name": "size",
+                "unit": null,
+                "bulkUnit": null,
+                "required": true,
+                "type": "select",
+                "supportedValues": [
+                    "XL",
+                    "XXL"
+                ]
+            },
+            {
+                "name": "features",
+                "unit": null,
+                "bulkUnit": null,
+                "required": true,
+                "type": "list",
+                "supportedValues": null
+            },
+            {
+                "name": "gender",
+                "unit": null,
+                "bulkUnit": null,
+                "required": true,
+                "type": "select",
+                "supportedValues": [
+                    "Male",
+                    "Female"
+                ]
+            },
+            {
+                "name": "ageGroup",
+                "unit": null,
+                "bulkUnit": null,
+                "required": true,
+                "type": "select",
+                "supportedValues": [
+                    "Children",
+                    "Adult"
+                ]
+            }
+        ],
+        "unit": null,
+        "bulkUnit": null,
+        "id": 2
+    }
+]

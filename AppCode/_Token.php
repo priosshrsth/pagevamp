@@ -2,23 +2,14 @@
 /*
  * Generate and set csrf token()
  */
-
-require_once '_Protect.php';
-
+require '_Protect.php';
 class Token {
     private static $_TOKEN;
 
     public function __construct() {
         self::$_TOKEN = md5(uniqid(rand(), TRUE));
-
         try {
-            if(isset($_SESSION[App::$key]) && is_object($_SESSION[App::$key])) {
-                $_SESSION[App::$key]->token = self::$_TOKEN;
-            } else {
-                $_SESSION[App::$key] = (object) array(
-                    'token' => self::$_TOKEN,
-                );
-            }
+            session('token', self::$_TOKEN);
 
         } catch (Exception $ex) {
             die("Unable To Set Session!");

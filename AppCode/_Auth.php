@@ -2,37 +2,62 @@
 
 <?php
 
-require_once '_Protect.php';
+require '_Protect.php';
 
 require_once '_Conn.php';
 
-require_once './AppCode/Models/User.php';
-
-require_once '_Controller.php';
+require_once 'Models/User.php';
+require_once 'Models/Admin.php';
 
 class Auth {
+    private static $guard = 'customer';
+
+    public function __construct($guard) {
+        self::$guard = $guard;
+    }
+
     public static function check() {
         /*
          * Check is User is logged in!
          */
-        if(session('user') !== null) {
+        if(session(self::$guard) !== null) {
             return self::authenticated();
         }
         return false;
     }
+
+    private function getUserClass() {
+        switch (self::$guard) {
+            case 'admin':
+                return new Admin();
+                break;
+            case 'customer':
+                return new User();
+                break;
+            default:
+                return new User();
+        }
+    }
+
     public static function authenticate($username,$password) {
         /*
          * Authenticate the user
          */
-        $data = data()->query("SELECT * FROM users WHERE username = '$username' OR email = '$username';")->fetchObject('User');
-        if(password_verify($password, $data->password)) {
-            $user = (object) array(
-                'name' => $data->name,
-                'username' => $data->username,
-                'email' => $data->email
-            );
-            session('user', $user);
-            return true;
+        $user = self::getUserClass()->where('username', $username);
+        if(sizeof($user)>0) {
+            $user = $user[0];
+            if (password_verify($password, $user->password)) {
+                $user = (object)array(
+                    'name' => $user->name,
+                    'username' => $user->username,
+                    'email' => $user->email,
+                    'avatar' => $user->avatar,
+                );
+                session(self::$guard, $user);
+                return true;
+            }
+        } else {
+            return false;
         }
     }
     
@@ -40,13 +65,16 @@ class Auth {
         /*
          * Return true if user is authenticated
          */
-        $user = session('user');
-        $data = data()->query("SELECT * FROM users WHERE username = '".$user->username."';")->fetchObject();
-        if($data != null) {
-            if(property_exists($data,'username') && $data->username !== '' && $data->username !== null) {
-                return true;
-            } else {
+        $sessionUser = session(self::$guard);
+        $user = self::getUserClass()->where('username', $sessionUser->username);
+        if(sizeof($user)>0) {
+            $user = $user[0];
+            if ($user != null) {
+                if (property_exists($user, 'username') && $user->username !== '' && $user->username !== null) {
+                    return true;
+                } else {
 
+                }
             }
         }
         return false;
@@ -57,18 +85,29 @@ class Auth {
          *  Return Authenticated user instance as object
          */
         if(self::check()) {
-            return session('user');
+            return session(self::$guard);
         } else {
             return (object) array(
                 'username' => null,
                 'id' => null,
                 'name' => null,
-                'email' => null
+                'email' => null,
+                'avatar' => null,
             );
         }
     }
 }
 
-function auth() {
-    return new Auth();
+function auth($guard = 'customer') {
+    switch ($guard) {
+        case 'admin':
+            return new Auth('admin');
+            break;
+        case 'customer':
+            return new Auth('customer');
+            break;
+        default:
+            return new Auth('customer');
+    }
+    return new Auth('customer');
 }
