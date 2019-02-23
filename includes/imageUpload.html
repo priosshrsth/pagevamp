@@ -1,0 +1,83 @@
+<script type="text/x-template" id="prios-image-template">
+    <v-container fluid pa-0>
+        <v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
+            <v-container grid-list-sm fluid pa-0>
+                <v-layout row wrap>
+                    <v-flex v-for="(image,key) in images" :key="key" xs2 d-flex>
+                        <v-card flat tile class="d-flex">
+                            <v-img contain :src="image.url" :lazy-src="image.url" aspect-ratio="1" class="grey lighten-2">
+                                <v-layout slot="placeholder" fill-height align-center justify-center ma-0>
+                                    <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                                </v-layout>
+                            </v-img>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+
+            <v-text-field readonly label="Select Image" @click='pickFile' v-model="imageNames" prepend-icon='attach_file'></v-text-field>
+            <input type="file" multiple="multiple" style="display: none" ref="realbtn" accept="image/*" @change="onFilePicked"
+            >
+        </v-flex>
+    </v-container>
+</script>
+
+
+<script>
+    Vue.component('prios-image', {
+        template: '#prios-image-template',
+        props: {
+            multiple: {
+                type: Boolean,
+                required: false,
+                default: false,
+            },
+            value: {
+                required: true,
+            }
+        },
+        data: () => ({
+            title: "Image Upload",
+            dialog: false,
+            images: [],
+        }),
+        computed: {
+            imageNames() {
+                var names = []
+                this.images.forEach((image)=> {
+                    names.push(image.name)
+                });
+                this.$emit('input', this.images)
+                return names;
+            }
+        },
+        methods: {
+            pickFile() {
+                this.$refs.realbtn.click()
+            },
+            onFilePicked(e) {
+                var self = this
+                const originalFiles = e.target.files;
+                var files = originalFiles
+                var image = {}
+                if(!this.multiple) {
+                    files = [files[0] !== undefined ? files[0] : []]
+                }
+
+                const fr = new FileReader()
+
+                for(var i=0; i<files.length; i++) {
+                    image.name = files[i].name
+                    if (image.name.lastIndexOf('.') <= 0) {
+                        return
+                    }
+                    fr.readAsDataURL(originalFiles[i])
+                    fr.addEventListener('load', () => {
+                        image.url = fr.result
+                        self.images.push(image)
+                    })
+                }
+            }
+        }
+    });
+</script>

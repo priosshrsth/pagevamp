@@ -10,5 +10,5 @@ require_once 'Model.php';
 
 class Product extends Model
 {
-    public $name;
+    public $name,$price,$stock,$image,$attributes,$category_id;
 }

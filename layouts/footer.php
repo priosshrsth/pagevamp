@@ -19,14 +19,12 @@
 <!-- Placed js at the end of the document so the pages load faster -->
 
 <!-- jquery latest version -->
-    <script
-            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
-            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="<?php asset('js/prios-vue-wysiwyg.js') ?>"></script>
 
     <?php
     if(isset($_JS)) {
@@ -42,10 +40,11 @@
     ?>
 
     <script>
+        // Vue.component('wysiwyg', {});
         axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
         axios.defaults.headers.common['X-CSRF-TOKEN'] = '<?php echo csrf_token(); ?>';
         toastr.options = {
-            "closeButton": true,
+            //"closeButton": true,
             "debug": false,
             "newestOnTop": false,
             "progressBar": true,
@@ -103,7 +102,6 @@
                     app.addToCart($(this).attr('product'));
                 }
             });
-
         });
 
         function text($el) {
@@ -124,7 +122,3 @@
             }
         }
     </script>
-
-</body>
-
-</html>

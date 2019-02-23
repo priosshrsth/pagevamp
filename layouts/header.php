@@ -30,7 +30,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
     <link rel="stylesheet" href="<?php asset('css/prios.css'); ?>">
+    <link rel="stylesheet" href="<?php asset('css/prios-vue-wysiwyg.css'); ?>">
     <script src="<?php asset('js/modernizr-2.8.3.min.js'); ?>"></script>
+
 
     <?php
     if(isset($_CSS)) {
@@ -68,15 +70,15 @@
                         <v-list-tile-title>Admin</v-list-tile-title>
                     </v-list-tile>
 
-                    <v-list-group sub-group no-action v-for="(admin, i) in admins" :key="i" @click="">
+                    <v-list-group sub-group no-action v-for="(BREAD, i) in BREADS" :key="i" @click="">
                         <v-list-tile slot="activator">
-                            <v-list-tile-title v-text="admin[0]"></v-list-tile-title>
+                            <v-list-tile-title v-text="BREAD[0]"></v-list-tile-title>
                             <v-list-tile-action>
-                                <v-icon v-text="admin[1]"></v-icon>
+                                <v-icon v-text="BREAD[1]"></v-icon>
                             </v-list-tile-action>
                         </v-list-tile>
 
-                        <v-list-tile v-for="(crud, i) in cruds" :key="i" @click="">
+                        <v-list-tile v-for="(crud, i) in cruds" :href="baseURL+'admin/'+BREAD[0].toLowerCase()+'.php?action='+crud[0].toLowerCase()" :key="i" @click="">
                             <v-list-tile-title v-text="crud[0]"></v-list-tile-title>
                             <v-list-tile-action>
                                 <v-icon v-text="crud[1]"></v-icon>

@@ -34,7 +34,7 @@ if($role=='admin' && !auth('admin')->check() && $action !=='login') {
 
 
 //Check Customer Authorization
-if($_GET['role']=='customer' && !auth('customer')->check() && $action !== 'login') {
+if(isset($_GET['role']) && $_GET['role']=='customer' && !auth('customer')->check() && $action !== 'login') {
     echo json_encode((object) [
         'success'=> false,
         'msg'=> 'Customer Not Logged In!',
@@ -56,6 +56,43 @@ if($action=='login') {
         ]);
     }
     die();
+}
+
+if($action == 'getCategories') {
+    echo json((object) [
+        'success' => true,
+        'categories' => Category::get(),
+    ]);
+    die();
+}
+
+if($action == 'addProduct') {
+    $product = json_decode($_POST['product']);
+    $PRODUCT = new Product();
+    $PRODUCT->name = $product->name;
+    $PRODUCT->category_id = $product->category_id;
+    $PRODUCT->price = $product->price;
+    $PRODUCT->stock = $product->stock;
+    $category = Category::find($product->category_id);
+    $PRODUCT->image = [];
+    foreach ($category->attributes as $attribute) {
+        $prop = $attribute->name;
+        $PRODUCT->$prop = $product->$prop;
+    }
+    foreach ($product->image as $image) {
+        $img = base64_decode($image->url);
+        //$content = explode('base64,', $img)[1];
+        //die($img);
+        $name = str_replace(' ', '_',$image->name);
+        $file = App::$base_path.'assets/images/'.$name;
+        file_put_contents($file, $img);
+        array_push($PRODUCT->image, $file);
+    }
+    Product::store($PRODUCT);
+    echo json((object) [
+        'success' => true,
+        'product' => $product
+    ]);
 }
 
 

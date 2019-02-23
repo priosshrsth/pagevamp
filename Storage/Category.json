@@ -7,7 +7,7 @@
                 "unit": "inch",
                 "bulkUnit": null,
                 "required": true,
-                "type": "string",
+                "type": "text",
                 "supportedValues": null
             },
             {

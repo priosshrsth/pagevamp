@@ -159,15 +159,17 @@ abstract class Model
         if($class==null) {
             $class = get_called_class();
         }
-        $file = storage('Storage/'.$class.'.json');
-        if(!file_exists($file)) {
-            file_put_contents($file,'');
-        }
-        $data = self::is_json($data)?$data:json($data);
-        if(!file_put_contents($file,$data)) {
-            return false;
-        } else {
-            return true;
+        if($class !== 'Array') {
+            $file = storage('Storage/' . $class . '.json');
+            if (!file_exists($file)) {
+                file_put_contents($file, '');
+            }
+            $data = self::is_json($data) ? $data : json($data);
+            if (!file_put_contents($file, $data)) {
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 
