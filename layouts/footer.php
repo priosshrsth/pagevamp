@@ -28,12 +28,12 @@
 
     <?php
     if(isset($_JS)) {
-        foreach($JS as $js) {
-            $css = explode(',');
+        foreach($_JS as $js) {
+            $js = explode(',',$js);
             if(end($js)==='cdn') {
-                echo "<script src='$js'></script>";
+                echo "<script src='$js[0]'></script>";
             } else {
-                echo "<script src='assets/js/$js'></script>";
+                echo "<script src='".asset("js/$js")."'></script>";
             }
         }
     }

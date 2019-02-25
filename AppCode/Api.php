@@ -1,4 +1,7 @@
 <?php
+require_once('../vendor/autoload.php');
+use Payment\Payment;
+
 $disablePathProtection = true;
 //disable token reset
 $preventTokenReset = true;
@@ -66,13 +69,22 @@ if($action == 'getCategories') {
     die();
 }
 
+if($action == 'getProducts') {
+    echo json((object) [
+        'success' => true,
+        'products' => Product::get(),
+        'categories' => Category::get(),
+    ]);
+    die();
+}
+
 if($action == 'addProduct') {
     $product = json_decode($_POST['product']);
     $PRODUCT = new Product();
     $PRODUCT->name = $product->name;
     $PRODUCT->category_id = $product->category_id;
     $PRODUCT->price = $product->price;
-    $PRODUCT->stock = $product->stock;
+    $PRODUCT->stock = abs($product->stock);
     $category = Category::find($product->category_id);
     $PRODUCT->image = [];
     foreach ($category->attributes as $attribute) {
@@ -80,19 +92,27 @@ if($action == 'addProduct') {
         $PRODUCT->$prop = $product->$prop;
     }
     foreach ($product->image as $image) {
-        $img = base64_decode($image->url);
-        //$content = explode('base64,', $img)[1];
-        //die($img);
+        $img = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $image->url));
         $name = str_replace(' ', '_',$image->name);
         $file = App::$base_path.'assets/images/'.$name;
         file_put_contents($file, $img);
-        array_push($PRODUCT->image, $file);
+        array_push($PRODUCT->image, $name);
     }
     Product::store($PRODUCT);
     echo json((object) [
         'success' => true,
         'product' => $product
     ]);
+}
+
+if($action=='checkout') {
+    $pay = new Payment();
+
+    $token = $_POST['stripe_token'];
+
+    $amount['amount'] = $_POST['totalPrice'];
+    $amount['currency'] = "USD";
+    echo $pay->makepayment($amount,$token);
 }
 
 

@@ -54,10 +54,10 @@
 <!-- Body main wrapper start -->
 <div id="app" class="wrapper fixed__footer">
     <v-app v-cloak <?php echo strpos(App::$url, '/admin')>-1?'dark':'' ?> id="pageContainer">
-        <v-progress-linear id="loading" :indeterminate="true"></v-progress-linear>
+        <v-progress-linear id="loading" :indeterminate="true">Loading..</v-progress-linear>
         <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app>
             <v-list>
-                <v-list-tile v-for="(item, i) in items" :key="i" :href="item.to" exact>
+                <v-list-tile v-for="(item, i) in links" :key="i" :href="item.to" exact>
                     <v-list-tile-action>
                         <v-icon>{{ item.icon }}</v-icon>
                     </v-list-tile-action>

@@ -1,15 +1,32 @@
-[    {
-        "name": "Randmin",
+[
+    {
+        "name": "Samsung 40\" SMART TV",
         "price": "10000",
         "stock": "8",
         "image": [
-            "\/home\/prios\/public_html\/ecommerce\/assets\/images\/Screenshot_from_2018-12-26_13-40-33.png"
+            "Samsung-TV-Apps-5@2x.jpg"
         ],
         "attributes": null,
         "category_id": 1,
-        "size": "9.7",
-        "features": "jkasdkasdnnas,dasdas",
+        "size": "40",
+        "features": "<ul><li>LED DISPLAY</li></ul>",
         "warranty": "5",
         "id": 10
+    },
+    {
+        "name": "Test",
+        "price": "1200",
+        "stock": "2",
+        "image": [
+            "fashion-victorian-fashion.jpg"
+        ],
+        "attributes": null,
+        "category_id": 2,
+        "size": "XL",
+        "features": "<p>Best Dressing</p>",
+        "warranty": null,
+        "gender": "Female",
+        "ageGroup": "Adult",
+        "id": 2
     }
 ]

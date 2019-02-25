@@ -30,7 +30,7 @@
             title: 'Prios Shopify!!',
         },
         computed: {
-            items() {
+            links() {
                 if(this.adminLoggedIn) {
                     return [
                         {
